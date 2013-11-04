@@ -25,6 +25,22 @@
   left: 60px;
 }
 
+#info ul {
+  padding: 9px;
+}
+
+#info li {
+  font-family: helvetica;
+  font-weight: 300;
+  list-style-type: none;
+  margin: 10px 0px;
+  font-size: 18px;
+}
+
+/*li:hover {
+  background-color: rgba(100,100,100,.4)
+}*/
+
 #info h1 {
   font-family: helvetica;
   font-weight: 300;
@@ -35,6 +51,11 @@
 <body>
   <div id="info">
     <h1>Washington DC</h1>
+    <ul>
+      <li>Education</li>
+      <li>Day Care</li>
+      <li>Health</li>
+    </ul>
   </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -63,6 +84,10 @@ d3.json('dc.json', function(dc) {
       .data(dc.features)
     .enter().append('path')
       .attr('class', 'hood')
+      .attr('id', function(d){
+          var id = d.properties.NAME.replace(/\s+/g, '-').toLowerCase()
+          return id
+      })
       .attr('d', path)
       .on('click', clicked)
       .on('mouseover', function(d){
