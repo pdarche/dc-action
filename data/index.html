@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<style>
+
+#map {
+  height:600px;
+  width:600px;
+}
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+#states {
+  fill: #aaa;
+}
+
+#states .active {
+  fill: orange;
+}
+
+#state-borders {
+  fill: black;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+</style>
+<body>
+  <div id="map"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+    var map = L.map('map').setView([38.89, -77.03], 12);
+
+    L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+    }).addTo(map);
+
+   d3.json('nbhd_data.json', function(data){ 
+      L.geoJson(data, {
+          style: function (feature) {
+              return '#0000FF';
+          },
+          onEachFeature: function (feature, layer) {
+              layer.bindPopup(feature.properties.description);
+          }
+      }).addTo(map);
+    })
+
+    // L.marker([51.5, -0.09]).addTo(map)
+    //   .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+    // L.circle([51.508, -0.11], 500, {
+    //   color: 'red',
+    //   fillColor: '#f03',
+    //   fillOpacity: 0.5
+    // }).addTo(map).bindPopup("I am a circle.");
+
+    // L.polygon([
+    //   [51.509, -0.08],
+    //   [51.503, -0.06],
+    //   [51.51, -0.047]
+    // ]).addTo(map).bindPopup("I am a polygon.");
+
+    // var popup = L.popup();
+
+    function onMapClick(e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+    }
+
+    map.on('click', onMapClick);
+
+  
+
+// var width = 1400,
+//     height = 500,
+//     centered,
+//     nbhd;
+
+// var projection = d3.geo.mercator()
+//     .scale(5000)
+//     // .translate([width / 2, height / 2]);
+
+// var path = d3.geo.path()
+//     .projection(projection);
+
+// var svg = d3.select("body").append("svg")
+//     .attr("width", width)
+//     .attr("height", height);
+
+// svg.append("rect")
+//     .attr("class", "background")
+//     .attr("width", width)
+//     .attr("height", height)
+//     .on("click", clicked);
+
+// var g = svg.append("g");
+
+// d3.json("nbhd_data.json", function(error, nbhd_data) {
+//   nbhd = nbhd_data
+//   g.append("g")
+//       .attr("id", "states")
+//     .selectAll("path")
+//       .data(topojson.feature(nbhd_data, nbhd_data.objects.nbhd_data).features)
+//     .enter().append("path")
+//       .attr("d", path)
+//       .on("click", clicked);
+
+//   g.append("path")
+//       .datum(topojson.mesh(nbhd_data, nbhd_data.objects.nbhd_data, function(a, b) { return a !== b; }))
+//       .attr("id", "state-borders")
+//       .attr("d", path);
+// });
+
+// function clicked(d) {
+//   var x, y, k;
+
+//   if (d && centered !== d) {
+//     var centroid = path.centroid(d);
+//     x = centroid[0];
+//     y = centroid[1];
+//     k = 4;
+//     centered = d;
+//   } else {
+//     x = width / 2;
+//     y = height / 2;
+//     k = 1;
+//     centered = null;
+//   }
+
+//   g.selectAll("path")
+//       .classed("active", centered && function(d) { return d === centered; });
+
+//   g.transition()
+//       .duration(750)
+//       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+//       .style("stroke-width", 1.5 / k + "px");
+// }
+
+</script>
