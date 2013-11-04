@@ -3,5 +3,5 @@ dc-action
 
 repo for DC action dive-related code
 
-# Install
+## requirements
 `pip install -r requirements.txt`
